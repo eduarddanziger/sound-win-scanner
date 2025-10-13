@@ -100,7 +100,7 @@
     <PropertyGroup>
       <BaseDirectory>$(MSBuildThisFileDirectory)..\..\</BaseDirectory>
       <ArtifactsDirectory>$(BaseDirectory)artifacts\</ArtifactsDirectory>
-      <ReleaseNotesFileName>SoundWinAgent-Release-Notes.md</ReleaseNotesFileName>
+      <ReleaseNotesFileName>SoundWinScanner-Release-Notes.md</ReleaseNotesFileName>
       <PublishFullDirectory>$(ProjectDir)PublishDir\</PublishFullDirectory>
       <ReleaseNotesTargetPathName>$(PublishFullDirectory)$(ReleaseNotesFileName)</ReleaseNotesTargetPathName>
       <ZipFileNameSuffix Condition=" '$(Configuration)' == 'Debug' ">-Debug</ZipFileNameSuffix>
