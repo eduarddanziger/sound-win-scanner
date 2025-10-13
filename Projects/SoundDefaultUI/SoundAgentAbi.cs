@@ -45,7 +45,7 @@ internal static class SoundAgentApi
 {
 #pragma warning disable SYSLIB1054 // Warning for DllImport -> LibraryImport
 #pragma warning disable CA2101 // Specify marshaling for P/Invoke string arguments
-    [DllImport("SoundAgentApiDll.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
+    [DllImport("SoundAgentApi.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
     internal static extern int SaaInitialize(
         out ulong handle,
         SaaGotLogMessageDelegate? gotLogMessageCallback,
@@ -54,26 +54,26 @@ internal static class SoundAgentApi
 #pragma warning restore CA2101
     );
 
-    [DllImport("SoundAgentApiDll.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
+    [DllImport("SoundAgentApi.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
     internal static extern int SaaRegisterCallbacks(
         ulong handle,
         SaaDefaultChangedDelegate? defaultRenderChangedCallback,
         SaaDefaultChangedDelegate? defaultCaptureChangedCallback
     );
 
-    [DllImport("SoundAgentApiDll.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
+    [DllImport("SoundAgentApi.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
     internal static extern int SaaGetDefaultRender(
         ulong handle,
         out SaaDescription description
     );
 
-    [DllImport("SoundAgentApiDll.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
+    [DllImport("SoundAgentApi.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
     internal static extern int SaaGetDefaultCapture(
         ulong handle,
         out SaaDescription description
     );
 
-    [DllImport("SoundAgentApiDll.dll", CallingConvention = CallingConvention.StdCall)]
+    [DllImport("SoundAgentApi.dll", CallingConvention = CallingConvention.StdCall)]
     internal static extern int SaaUnInitialize(
         ulong handle
     );

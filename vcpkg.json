@@ -1,6 +1,10 @@
 {
     "dependencies": [
         "fmt",
+        {
+            "name": "spdlog",
+            "version>=": "1.15.1"
+        },
         "magic-enum",
         "boost-locale"
     ],

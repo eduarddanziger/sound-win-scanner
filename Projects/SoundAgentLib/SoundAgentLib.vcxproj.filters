@@ -51,12 +51,6 @@
     <ClInclude Include="ApiClient\common\TimeUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ApiClient\AudioDeviceApiClient.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ApiClient\SodiumCrypt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ApiClient\common\SpdLogger\AppPath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -67,18 +61,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ApiClient\common\SpdLogger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ApiClient\RequestPublisher.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ApiClient\HttpRequestDispatcherInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ApiClient\RabbitMqHttpRequestDispatcher.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ApiClient\Contracts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,20 +74,5 @@
     <ClCompile Include="SoundDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ApiClient\AudioDeviceApiClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ApiClient\SodiumCrypt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ApiClient\RabbitMqHttpRequestDispatcher.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ApiClient\RequestPublisher.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ApiClient\README.md" />
   </ItemGroup>
 </Project>

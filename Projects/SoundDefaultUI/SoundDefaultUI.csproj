@@ -9,7 +9,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <BaseDirectory>$(MSBuildThisFileDirectory)..\..\</BaseDirectory>
     <ArtifactsDirectory>$(BaseDirectory)artifacts\</ArtifactsDirectory>
-    <ReleaseNotesFileName>SoundWinAgent-Release-Notes.md</ReleaseNotesFileName>
+    <ReleaseNotesFileName>SoundWinScanner-Release-Notes.md</ReleaseNotesFileName>
     <ApplicationIcon>resources\Headphone.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -50,7 +50,7 @@
   </ItemGroup>
 
   <Target Name="CopyDll" AfterTargets="Build">
-      <Copy DestinationFolder="$(OutputPath)" SourceFiles="$(BaseDirectory)x64\$(Configuration)\SoundAgentApiDll.dll" /> 
+      <Copy DestinationFolder="$(OutputPath)" SourceFiles="$(BaseDirectory)x64\$(Configuration)\SoundAgentApi.dll" /> 
   </Target>
 
   <Target Name="ProcessReleaseNotes" Condition=" '$(_IsPublishing)' != 'true' " BeforeTargets="BeforeBuild">
@@ -73,7 +73,7 @@
           <ZipFileName>$(ArtifactsDirectory)$(AssemblyName)$(ZipFileNameSuffix)-$(Version).zip</ZipFileName>
       </PropertyGroup>
       <Copy DestinationFolder="$(PublishFullDirectory)" SourceFiles="$(ArtifactsDirectory)$(ReleaseNotesFileName)" />
-      <Copy DestinationFolder="$(PublishFullDirectory)" SourceFiles="$(OutputPath)\SoundAgentApiDll.dll" />
+      <Copy DestinationFolder="$(PublishFullDirectory)" SourceFiles="$(OutputPath)\SoundAgentApi.dll" />
       <Copy DestinationFolder="$(PublishFullDirectory)" SourceFiles="$(ProjectDir)CodeSign.cer" />
       <ZipDirectory Overwrite="true" SourceDirectory="$(PublishFullDirectory)" DestinationFile="$(ZipFileName)" />
   </Target>
