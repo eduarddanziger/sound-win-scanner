@@ -6,7 +6,7 @@
             "version>=": "1.15.1"
         },
         "magic-enum",
-        "boost-locale"
+        "boost-nowide"
     ],
   "builtin-baseline": "d5ec528843d29e3a52d745a64b469f810b2cedbf"
 }
