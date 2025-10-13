@@ -1,0 +1,72 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34511.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoundAgentLib", "Projects\SoundAgentLib\SoundAgentLib.vcxproj", "{19C404F0-A83C-4E4F-A931-7A76809CC0C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F91E0676-3871-489C-9444-F8979C0B6D46}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		202509011440SoundDefaultUI.jpg = 202509011440SoundDefaultUI.jpg
+		202509011555ReactRepoApp.jpg = 202509011555ReactRepoApp.jpg
+		.github\workflows\build.yml = .github\workflows\build.yml
+		LICENSE = LICENSE
+		README.md = README.md
+		SoundWinScanner-Release-Notes.md = SoundWinScanner-Release-Notes.md
+		vcpkg.json = vcpkg.json
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoundAgentCli", "Projects\SoundAgentCli\SoundAgentCli.vcxproj", "{844C9DC2-66C1-4778-97FC-AF3AE88B679B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoundAgentLibTests", "Projects\SoundAgentLibTests\SoundAgentLibTests.vcxproj", "{6ADFEACB-EFA0-40D3-84FF-9BAEA2A264EA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoundAgentApi", "Projects\SoundAgentApiDll\SoundAgentApi.vcxproj", "{92AFAD2A-A573-4239-80DC-4CDC28FD3A7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundDefaultUI", "Projects\SoundDefaultUI\SoundDefaultUI.csproj", "{5B7BBF93-1CE3-7A17-DC7A-432D3575AFB6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{92AFAD2A-A573-4239-80DC-4CDC28FD3A7E} = {92AFAD2A-A573-4239-80DC-4CDC28FD3A7E}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{19C404F0-A83C-4E4F-A931-7A76809CC0C5}.Debug|x64.ActiveCfg = Debug|x64
+		{19C404F0-A83C-4E4F-A931-7A76809CC0C5}.Debug|x64.Build.0 = Debug|x64
+		{19C404F0-A83C-4E4F-A931-7A76809CC0C5}.Debug|x64.Deploy.0 = Debug|x64
+		{19C404F0-A83C-4E4F-A931-7A76809CC0C5}.Release|x64.ActiveCfg = Release|x64
+		{19C404F0-A83C-4E4F-A931-7A76809CC0C5}.Release|x64.Build.0 = Release|x64
+		{19C404F0-A83C-4E4F-A931-7A76809CC0C5}.Release|x64.Deploy.0 = Release|x64
+		{844C9DC2-66C1-4778-97FC-AF3AE88B679B}.Debug|x64.ActiveCfg = Debug|x64
+		{844C9DC2-66C1-4778-97FC-AF3AE88B679B}.Debug|x64.Build.0 = Debug|x64
+		{844C9DC2-66C1-4778-97FC-AF3AE88B679B}.Debug|x64.Deploy.0 = Debug|x64
+		{844C9DC2-66C1-4778-97FC-AF3AE88B679B}.Release|x64.ActiveCfg = Release|x64
+		{844C9DC2-66C1-4778-97FC-AF3AE88B679B}.Release|x64.Build.0 = Release|x64
+		{844C9DC2-66C1-4778-97FC-AF3AE88B679B}.Release|x64.Deploy.0 = Release|x64
+		{6ADFEACB-EFA0-40D3-84FF-9BAEA2A264EA}.Debug|x64.ActiveCfg = Debug|x64
+		{6ADFEACB-EFA0-40D3-84FF-9BAEA2A264EA}.Debug|x64.Build.0 = Debug|x64
+		{6ADFEACB-EFA0-40D3-84FF-9BAEA2A264EA}.Debug|x64.Deploy.0 = Debug|x64
+		{6ADFEACB-EFA0-40D3-84FF-9BAEA2A264EA}.Release|x64.ActiveCfg = Release|x64
+		{6ADFEACB-EFA0-40D3-84FF-9BAEA2A264EA}.Release|x64.Build.0 = Release|x64
+		{6ADFEACB-EFA0-40D3-84FF-9BAEA2A264EA}.Release|x64.Deploy.0 = Release|x64
+		{92AFAD2A-A573-4239-80DC-4CDC28FD3A7E}.Debug|x64.ActiveCfg = Debug|x64
+		{92AFAD2A-A573-4239-80DC-4CDC28FD3A7E}.Debug|x64.Build.0 = Debug|x64
+		{92AFAD2A-A573-4239-80DC-4CDC28FD3A7E}.Debug|x64.Deploy.0 = Debug|x64
+		{92AFAD2A-A573-4239-80DC-4CDC28FD3A7E}.Release|x64.ActiveCfg = Release|x64
+		{92AFAD2A-A573-4239-80DC-4CDC28FD3A7E}.Release|x64.Build.0 = Release|x64
+		{92AFAD2A-A573-4239-80DC-4CDC28FD3A7E}.Release|x64.Deploy.0 = Release|x64
+		{5B7BBF93-1CE3-7A17-DC7A-432D3575AFB6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5B7BBF93-1CE3-7A17-DC7A-432D3575AFB6}.Debug|x64.Build.0 = Debug|Any CPU
+		{5B7BBF93-1CE3-7A17-DC7A-432D3575AFB6}.Release|x64.ActiveCfg = Release|Any CPU
+		{5B7BBF93-1CE3-7A17-DC7A-432D3575AFB6}.Release|x64.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C671421F-7380-4959-B337-7B33904234CC}
+	EndGlobalSection
+EndGlobal
