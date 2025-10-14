@@ -4,7 +4,7 @@ package soundlibwrap
 
 /*
 #cgo windows CFLAGS: -DUNICODE -D_UNICODE
-#cgo windows LDFLAGS: -L${SRCDIR} -lSoundAgentApiDll
+#cgo windows LDFLAGS: -L${SRCDIR} -lSoundAgentApi
 
 #include <stdint.h>
 #include <stdbool.h>
