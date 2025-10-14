@@ -11,7 +11,7 @@ Released on $date$
 ~~~
 
 ## Changes
-- soundscanner.go package generated
+- sound-win-scanner.go module generated
 
 4.0.0
 --------

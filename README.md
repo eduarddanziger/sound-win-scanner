@@ -8,6 +8,11 @@ Sound Scanner detects and outputs plug-and-play audio endpoint devices under Win
   ![SoundDefaultUI screenshot](202509011440SoundDefaultUI.jpg)
 - **SoundAgentCli**: Command-line test CLI.
 
+## Packages/Modules Generated
+
+- **sound-win-scanner**: go module that wraps the C++ core logic and provides a Go API.
+
+
 ## Technologies Used
 
 - **C++ / Go**: Core logic implementation.
