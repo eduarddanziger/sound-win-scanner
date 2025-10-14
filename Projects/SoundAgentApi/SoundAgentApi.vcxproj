@@ -80,4 +80,23 @@
   </ItemGroup>
   <Import Project="$(MSBuildThisFileDirectory)..\..\msbuildLibCpp\Ed.Cpp.targets" />
   <Target Name="RunUnitTests" />
+  <Target Name="CollectAndZipOutput" AfterTargets="Sign">
+    <PropertyGroup>
+      <BaseDirectory>$(MSBuildThisFileDirectory)..\..\</BaseDirectory>
+      <ArtifactsDirectory>$(BaseDirectory)artifacts\</ArtifactsDirectory>
+      <GoLibName>SoundAgentApi</GoLibName>
+      <BuiltDll>$(TargetPath)</BuiltDll>
+      <ImportLib>$(OutDir)$(TargetName).lib</ImportLib>
+      <ZipFileNameSuffix Condition=" '$(Configuration)' == 'Debug' ">-Debug</ZipFileNameSuffix>
+      <ZipFileName>$(ArtifactsDirectory)$(AssemblyName)$(ZipFileNameSuffix)-$(PackageVersion).zip</ZipFileName>
+      <PublishFullDirectory>$(ProjectDir)PublishDir\</PublishFullDirectory>
+    </PropertyGroup>
+    <MakeDir Directories="$(ArtifactsDirectory)" Condition="!Exists('$(ArtifactsDirectory)')" />
+    <MakeDir Directories="$(PublishFullDirectory)" Condition="!Exists('$(PublishFullDirectory)')" />
+    <Copy SourceFiles="$(ProjectDir)SoundAgentApi.h" DestinationFolder="$(PublishFullDirectory)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(BuiltDll)" DestinationFolder="$(PublishFullDirectory)" SkipUnchangedFiles="true" Condition="Exists('$(BuiltDll)')" />
+    <Copy SourceFiles="$(ImportLib)" DestinationFolder="$(PublishFullDirectory)" SkipUnchangedFiles="true" Condition="Exists('$(ImportLib)')" />
+    <ZipDirectory Overwrite="true" SourceDirectory="$(PublishFullDirectory)" DestinationFile="$(ZipFileName)" />
+    <RemoveDir Directories="$(PublishFullDirectory)" />
+  </Target>
 </Project>
