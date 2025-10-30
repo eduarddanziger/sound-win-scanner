@@ -30,7 +30,7 @@ Sound Scanner detects and outputs plug-and-play audio endpoint devices under Win
 choco install rabbitmq
 ```
 
-2. Download and unzip the latest rollout of RambbitMQ-To REST-API-Forwarder: RmqToRestApiForwarder-x.x.x. from
+2. Download and unzip the latest release of RabbitMQ-To REST-API-Forwarder: RmqToRestApiForwarder-x.x.x. from
 the latest release's assets, [RmqToRestApiForwarder Release](https://github.com/eduarddanziger/rmq-to-rest-api-forwarder/releases/latest)
 3. Register RmqToRestApiForwarder.exe as a Windows Service and start it:
 
@@ -42,7 +42,7 @@ sc start RmqToRestApiForwarder
 
 ### SoundDefaultUI
 1. Download and unzip the latest rollout of SoundDefaultUI-x.x.x. from the latest repository
-release's assets, [Release](https://github.com/eduarddanziger/SoundWinScanner/releases/latest)
+release's assets, [Release](https://github.com/eduarddanziger/sound-win-scanner/releases/latest)
 
 2. Install certificates and unblock the SoundDefaultUI.exe per PowerShell (start as Administrator):
 
@@ -53,6 +53,15 @@ release's assets, [Release](https://github.com/eduarddanziger/SoundWinScanner/re
 3. Run the SoundDefaultUI
 
 ## Developer Environment, How to Build:
+
+### Prerequisites
+
+- .NET 8 SDK installed (required to build the WPF `SoundDefaultUI` project).
+- vcpkg installed and bootstrapped:
+  - Clone vcpkg and run the bootstrap script (Windows): `bootstrap-vcpkg.bat`
+  - Ensure `vcpkg.exe` is available on PATH or configure your build to point to it.
+
+### Instructions
 
 1. Install Visual Studio 2022
 2. Build the solution, e.g. if you use Visual Studio Community Edition:
