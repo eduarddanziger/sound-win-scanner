@@ -37,7 +37,7 @@ type Description struct {
 }
 
 type DefaultChangedCallback func(present bool)
-type GotLogMessageCallback func(level, content string)
+type GotLogMessageCallback func(timestamp, level, content string)
 
 // Handlers set by app.
 var (
@@ -60,9 +60,9 @@ func NotifyDefaultCaptureChanged(present bool) {
 		captureHandler(present)
 	}
 }
-func NotifyGotLogMessage(level, content string) {
+func NotifyGotLogMessage(timestamp, level, content string) {
 	if logHandler != nil {
-		logHandler(level, content)
+		logHandler(timestamp, level, content)
 	}
 }
 

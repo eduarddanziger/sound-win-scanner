@@ -75,10 +75,11 @@ void DllObserver::OnCollectionChanged(SoundDeviceEventType event, const std::str
 namespace  {
     TSaaGotLogMessageCallback got_log_message_callback = nullptr;
 
-    void LoggerMessageBridge(const std::string& level, const std::string& message)
+    void LoggerMessageBridge(const std::string& timestamp, const std::string& level, const std::string& message)
     {
         if (got_log_message_callback == nullptr) return;
         SaaLogMessage out{}; // zero-init
+        strncpy_s(out.Timestamp, _countof(out.Timestamp), timestamp.c_str(), _TRUNCATE);
         strncpy_s(out.Level, _countof(out.Level), level.c_str(), _TRUNCATE);
         strncpy_s(out.Content, _countof(out.Content), message.c_str(), _TRUNCATE);
         got_log_message_callback(out);
