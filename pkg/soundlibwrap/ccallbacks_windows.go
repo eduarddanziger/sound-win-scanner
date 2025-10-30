@@ -21,7 +21,8 @@ func cgoSaaDefaultCaptureChanged(present C.int) {
 
 //export cgoSaaGotLogMessage
 func cgoSaaGotLogMessage(msg C.SaaLogMessage) {
+	timestamp := C.GoString(&msg.Timestamp[0])
 	level := C.GoString(&msg.Level[0])
 	content := C.GoString(&msg.Content[0])
-	NotifyGotLogMessage(level, content)
+	NotifyGotLogMessage(timestamp, level, content)
 }
