@@ -52,10 +52,7 @@ jobs:
                 $versionParts[2] = [int]$versionParts[2] + 1
                 $versionNumber = $versionParts -join '.'
                 Write-Output "VERSION CORRECTED, versionNumber: $versionNumber"
-
-                $distancePadded = $distance.ToString().PadLeft(3, '0')
-                Write-Output "DISTANCE PADDED, distancePadded: $distancePadded"
-                $version = "$versionNumber-rc$distancePadded"
+                $version = "$versionNumber-rc.$distance"
             } else {
                 $version = $versionNumber
             }
