@@ -1,7 +1,7 @@
 ﻿Sound Windows Scanner - Release Notes 
 =====================================
 ~~~
-Copyright 2025 by Eduard Danziger
+Copyright 2025-2026 by Eduard Danziger
 ~~~
 
 $version$
