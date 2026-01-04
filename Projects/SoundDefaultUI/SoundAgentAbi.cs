@@ -25,6 +25,9 @@ public struct SaaDescription
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 public struct SaaLogMessage
 {
+    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+    public string Timestamp;
+
     [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
     public string Level;
 
