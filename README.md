@@ -42,7 +42,7 @@ sc start RmqToRestApiForwarder
 
 ### SoundDefaultUI
 1. Download and unzip the latest rollout of SoundDefaultUI-x.x.x. from the latest repository
-release's assets, [Release](https://github.com/eduarddanziger/sound-win-scanner/releases/latest)
+release's assets, [Release](https://github.com/collect-sound-devices/sound-win-scanner/releases/latest)
 
 2. Install certificates and unblock the SoundDefaultUI.exe per PowerShell (start as Administrator):
 
