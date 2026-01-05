@@ -1,3 +1,3 @@
-module github.com/eduarddanziger/sound-win-scanner/v4
+module github.com/collect-sound-devices/sound-win-scanner/v4
 
 go 1.22
