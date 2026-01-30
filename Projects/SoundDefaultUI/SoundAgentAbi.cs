@@ -35,9 +35,19 @@ public struct SaaLogMessage
     public byte[] Content; // UTF-8 encoded string
 }
 
+public enum SaaEventType
+{
+    SaaDefaultRenderAttached = 0,
+    SaaDefaultCaptureAttached = 1,
+    SaaDefaultRenderDetached = 2,
+    SaaDefaultCaptureDetached = 3,
+    SaaVolumeRenderChanged = 4,
+    SaaVolumeCaptureChanged = 5
+}
+
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 public delegate void SaaDefaultChangedDelegate(
-    [MarshalAs(UnmanagedType.Bool)] bool presentOrAbsent
+    SaaEventType eventType
 );
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]

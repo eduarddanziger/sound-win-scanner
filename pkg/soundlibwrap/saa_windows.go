@@ -13,8 +13,8 @@ package soundlibwrap
 #include "SoundAgentApi.h"
 
 // Forward declarations of Go-exported callbacks (implemented in this package)
-void __stdcall cgoSaaDefaultRenderChanged(BOOL presentOrAbsent);
-void __stdcall cgoSaaDefaultCaptureChanged(BOOL presentOrAbsent);
+void __stdcall cgoSaaDefaultRenderChanged(SaaEventType event);
+void __stdcall cgoSaaDefaultCaptureChanged(SaaEventType event);
 void __stdcall cgoSaaGotLogMessage(SaaLogMessage message);
 */
 import "C"
@@ -38,17 +38,22 @@ type Description struct {
 
 type DefaultChangedCallback func(present bool)
 type GotLogMessageCallback func(timestamp, level, content string)
+type VolumeChangedCallback func()
 
 // Handlers set by app.
 var (
 	logHandler     GotLogMessageCallback
 	renderHandler  DefaultChangedCallback
 	captureHandler DefaultChangedCallback
+	renderVolumeHandler  VolumeChangedCallback
+	captureVolumeHandler VolumeChangedCallback
 )
 
 func SetLogHandler(h GotLogMessageCallback)             { logHandler = h }
 func SetDefaultRenderHandler(h DefaultChangedCallback)  { renderHandler = h }
 func SetDefaultCaptureHandler(h DefaultChangedCallback) { captureHandler = h }
+func SetRenderVolumeChangedHandler(h VolumeChangedCallback)  { renderVolumeHandler = h }
+func SetCaptureVolumeChangedHandler(h VolumeChangedCallback) { captureVolumeHandler = h }
 
 func NotifyDefaultRenderChanged(present bool) {
 	if renderHandler != nil {
@@ -63,6 +68,18 @@ func NotifyDefaultCaptureChanged(present bool) {
 func NotifyGotLogMessage(timestamp, level, content string) {
 	if logHandler != nil {
 		logHandler(timestamp, level, content)
+	}
+}
+
+func NotifyRenderVolumeChanged() {
+	if renderVolumeHandler != nil {
+		renderVolumeHandler()
+	}
+}
+
+func NotifyCaptureVolumeChanged() {
+	if captureVolumeHandler != nil {
+		captureVolumeHandler()
 	}
 }
 

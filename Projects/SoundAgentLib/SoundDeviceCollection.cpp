@@ -2,6 +2,7 @@
 #include "os-dependencies.h"
 
 #define INITGUID
+// ReSharper disable once CppInconsistentNaming
 extern "C" const CLSID CLSID_StdGlobalInterfaceTable;
 #include <initguid.h>
 
@@ -12,7 +13,6 @@ extern "C" const CLSID CLSID_StdGlobalInterfaceTable;
 
 #include "ApiClient/common/StringUtils.h"
 
-#include <iostream>
 #include <cstddef>
 #include <mmdeviceapi.h>
 #include <endpointvolume.h>
@@ -116,6 +116,7 @@ void ed::audio::SoundDeviceCollection::Unsubscribe(SoundDeviceObserverInterface 
     observers_.erase(&observer);
 }
 
+// ReSharper disable once CppPassValueParameterByConstReference
 std::optional<std::wstring> ed::audio::SoundDeviceCollection::GetDeviceId(CComPtr<IMMDevice> deviceEndpointSmartPtr)
 {
     if (!deviceEndpointSmartPtr)
