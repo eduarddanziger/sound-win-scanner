@@ -38,6 +38,5 @@ private:
     uint16_t captureVolume_; // 0 to 1000
     bool renderIsDefault_ = false;
     bool captureIsDefault_ = false;
-public:
 };
 }
