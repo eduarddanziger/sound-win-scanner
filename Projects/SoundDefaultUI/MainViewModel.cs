@@ -33,7 +33,7 @@ public class MainViewModel
         WindowTitle = "System Default Sound";
 
         SoundDeviceService = soundDeviceService;
-        SoundDeviceService.InitializeAndBind(OnDefaultRenderPresentOrAbsent, OnDefaultCapturePresentOrAbsent);
+        SoundDeviceService.InitializeAndBind(OnDefaultRenderChanged, OnDefaultCaptureChanged);
 
         var render = SoundDeviceService.GetRenderDevice();
         RenderDeviceViewModel.Device = render.PnpId.Length != 0 ? render : null;
@@ -42,7 +42,7 @@ public class MainViewModel
         CaptureDeviceViewModel.Device = capture.PnpId.Length != 0 ? capture : null;
     }
 
-    private static void OnDefaultRenderPresentOrAbsent(bool presentOrAbsent)
+    private static void OnDefaultRenderChanged(SaaEventType eventType)
     {
         Dispatcher.Invoke(() =>
         {
@@ -54,13 +54,21 @@ public class MainViewModel
                 var mainWindow = Window.GetWindow(currentMainWindow) as MainWindow;
                 if (mainWindow?.DataContext is MainViewModel vm)
                 {
-                    vm.RenderDeviceViewModel.Device = presentOrAbsent ? vm.SoundDeviceService.GetRenderDevice() : null;
+                    vm.RenderDeviceViewModel.Device = eventType switch
+                    {
+                        SaaEventType.SaaDefaultRenderAttached or SaaEventType.SaaVolumeRenderChanged
+                            => vm.SoundDeviceService.GetRenderDevice(),
+                        SaaEventType.SaaDefaultRenderDetached
+                            => null,
+                        _
+                            => vm.RenderDeviceViewModel.Device
+                    };
                 }
             }
         });
     }
 
-    private static void OnDefaultCapturePresentOrAbsent(bool presentOrAbsent)
+    private static void OnDefaultCaptureChanged(SaaEventType eventType)
     {
         Dispatcher.Invoke(() =>
         {
@@ -72,7 +80,15 @@ public class MainViewModel
                 var mainWindow = Window.GetWindow(currentMainWindow) as MainWindow;
                 if (mainWindow?.DataContext is MainViewModel vm)
                 {
-                    vm.CaptureDeviceViewModel.Device = presentOrAbsent ? vm.SoundDeviceService.GetCaptureDevice() : null;
+                    vm.CaptureDeviceViewModel.Device = eventType switch
+                    {
+                        SaaEventType.SaaDefaultCaptureAttached or SaaEventType.SaaVolumeCaptureChanged
+                            => vm.SoundDeviceService.GetCaptureDevice(),
+                        SaaEventType.SaaDefaultCaptureDetached
+                            => null,
+                        _
+                            => vm.CaptureDeviceViewModel.Device
+                    };
                 }
             }
         });

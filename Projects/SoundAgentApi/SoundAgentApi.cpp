@@ -45,28 +45,32 @@ void DllObserver::OnCollectionChanged(SoundDeviceEventType event, const std::str
     {
         if (event == SoundDeviceEventType::DefaultRenderChanged)
         {
-            defaultRenderChangedCallback_(devicePnpId.empty() ? FALSE : TRUE);
+            defaultRenderChangedCallback_(devicePnpId.empty() ? SaaDefaultRenderDetached : SaaDefaultRenderAttached);
         }
         if (
             (event == SoundDeviceEventType::VolumeRenderChanged || event == SoundDeviceEventType::VolumeCaptureChanged)
             && device_collection != nullptr && device_collection->GetDefaultRenderDevicePnpId() == devicePnpId
         )
         {
-            defaultRenderChangedCallback_(TRUE);
+            defaultRenderChangedCallback_(event == SoundDeviceEventType::VolumeRenderChanged
+                ? SaaVolumeRenderChanged
+                : SaaVolumeCaptureChanged);
         }
     }
     if (defaultCaptureChangedCallback_ != nullptr)
     {
         if (event == SoundDeviceEventType::DefaultCaptureChanged)
         {
-            defaultCaptureChangedCallback_(devicePnpId.empty() ? FALSE : TRUE);
+            defaultCaptureChangedCallback_(devicePnpId.empty() ? SaaDefaultCaptureDetached : SaaDefaultCaptureAttached);
         }
         if (
             (event == SoundDeviceEventType::VolumeCaptureChanged || event == SoundDeviceEventType::VolumeRenderChanged)
             && device_collection != nullptr && device_collection->GetDefaultCaptureDevicePnpId() == devicePnpId
         )
         {
-            defaultCaptureChangedCallback_(TRUE);
+            defaultCaptureChangedCallback_(event == SoundDeviceEventType::VolumeCaptureChanged
+                ? SaaVolumeCaptureChanged
+                : SaaVolumeRenderChanged);
         }
     }
 }

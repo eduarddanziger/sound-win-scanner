@@ -50,9 +50,19 @@
         CHAR Content[256]; /**< Message text. */
     } SaaLogMessage;
 
-    /** Default device / volume change notification. presentOrAbsent: TRUE if a default device exists. */
+    /** Default device / volume change notification event type. */
+    typedef enum {
+        SaaDefaultRenderAttached = 0,
+        SaaDefaultCaptureAttached = 1,
+        SaaDefaultRenderDetached = 2,
+        SaaDefaultCaptureDetached = 3,
+        SaaVolumeRenderChanged = 4,
+        SaaVolumeCaptureChanged = 5
+    } TSaaEventType;
+
+    /** Default device / volume change notification. */
     typedef void(__stdcall* TSaaDefaultChangedCallback)(
-        _In_ BOOL presentOrAbsent
+        _In_ TSaaEventType event
         );
 
     /** Asynchronous log message callback. */

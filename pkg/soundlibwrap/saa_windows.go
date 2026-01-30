@@ -13,8 +13,8 @@ package soundlibwrap
 #include "SoundAgentApi.h"
 
 // Forward declarations of Go-exported callbacks (implemented in this package)
-void __stdcall cgoSaaDefaultRenderChanged(BOOL presentOrAbsent);
-void __stdcall cgoSaaDefaultCaptureChanged(BOOL presentOrAbsent);
+void __stdcall cgoSaaDefaultRenderChanged(TSaaEventType event);
+void __stdcall cgoSaaDefaultCaptureChanged(TSaaEventType event);
 void __stdcall cgoSaaGotLogMessage(SaaLogMessage message);
 */
 import "C"
