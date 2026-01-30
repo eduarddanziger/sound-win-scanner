@@ -10,13 +10,27 @@ package soundlibwrap
 import "C"
 
 //export cgoSaaDefaultRenderChanged
-func cgoSaaDefaultRenderChanged(present C.int) {
-	NotifyDefaultRenderChanged(present != 0)
+func cgoSaaDefaultRenderChanged(event C.SaaEventType) {
+	switch event {
+	case C.SaaDefaultRenderAttached:
+		NotifyDefaultRenderChanged(true)
+	case C.SaaDefaultRenderDetached:
+		NotifyDefaultRenderChanged(false)
+	case C.SaaVolumeRenderChanged:
+		NotifyRenderVolumeChanged()
+	}
 }
 
 //export cgoSaaDefaultCaptureChanged
-func cgoSaaDefaultCaptureChanged(present C.int) {
-	NotifyDefaultCaptureChanged(present != 0)
+func cgoSaaDefaultCaptureChanged(event C.SaaEventType) {
+	switch event {
+	case C.SaaDefaultCaptureAttached:
+		NotifyDefaultCaptureChanged(true)
+	case C.SaaDefaultCaptureDetached:
+		NotifyDefaultCaptureChanged(false)
+	case C.SaaVolumeCaptureChanged:
+		NotifyCaptureVolumeChanged()
+	}
 }
 
 //export cgoSaaGotLogMessage
