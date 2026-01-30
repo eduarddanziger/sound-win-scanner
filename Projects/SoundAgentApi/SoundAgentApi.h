@@ -58,11 +58,11 @@
         SaaDefaultCaptureDetached = 3,
         SaaVolumeRenderChanged = 4,
         SaaVolumeCaptureChanged = 5
-    } TSaaEventType;
+    } SaaEventType;
 
     /** Default device / volume change notification. */
     typedef void(__stdcall* TSaaDefaultChangedCallback)(
-        _In_ TSaaEventType event
+        _In_ SaaEventType event
         );
 
     /** Asynchronous log message callback. */
