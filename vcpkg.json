@@ -1,12 +1,12 @@
 {
-    "dependencies": [
-        "fmt",
-        {
-            "name": "spdlog",
-            "version>=": "1.15.1"
-        },
-        "magic-enum",
-        "boost-nowide"
-    ],
-  "builtin-baseline": "d5ec528843d29e3a52d745a64b469f810b2cedbf"
+  "dependencies": [
+    "fmt",
+    {
+      "name": "spdlog",
+      "version>=": "1.15.1"
+    },
+    "magic-enum",
+    "boost-nowide"
+  ],
+  "builtin-baseline": "e5a1490e1409d175932ef6014519e9ae149ddb7c"
 }
