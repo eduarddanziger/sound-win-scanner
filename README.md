@@ -55,14 +55,14 @@ release's assets, [Release](https://github.com/collect-sound-devices/sound-win-s
 
 ### Prerequisites
 
-- .NET 8 SDK installed (required to build the WPF `SoundDefaultUI` project).
+- .NET 10 SDK installed (required to build the WPF `SoundDefaultUI` project).
 - vcpkg installed and bootstrapped:
   - Clone vcpkg and run the bootstrap script (Windows): `bootstrap-vcpkg.bat`
   - Ensure `vcpkg.exe` is available on PATH or configure your build to point to it.
 
 ### Instructions
 
-1. Install Visual Studio 2022
+1. Install Visual Studio 2026
 2. Build the solution, e.g. if you use Visual Studio Community Edition:
 ```powershell
 %NuGet% restore SoundWinScanner.sln
