@@ -2,16 +2,15 @@
 
 Sound Scanner detects and outputs plug-and-play audio endpoint devices under Windows. It handles audio notifications and device changes.
 
+## Modules Generated
+
+- **sound-win-scanner**: Go module that wraps the C++ core logic and provides a Go API for [WinSoundScanner](https://github.com/collect-sound-devices/win-sound-scanner-go)
+
 ## Executables Generated
 
 - **SoundDefaultUI**: Lightweight WPF UI showing the live volume levels of the default audio devices, output and input device separately.
   ![SoundDefaultUI screenshot](202509011440SoundDefaultUI.jpg)
 - **SoundAgentCli**: Command-line test CLI.
-
-## Packages/Modules Generated
-
-- **sound-win-scanner**: go module that wraps the C++ core logic and provides a Go API.
-
 
 ## Technologies Used
 
