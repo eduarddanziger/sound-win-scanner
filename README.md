@@ -1,8 +1,15 @@
 # Sound Windows Scanner (SoundWinScanner)
 
-SoundWinScanner is a sound device scanner engine that contains C/C++ sound agent core library with its DLL- and a Go-module-frontends, and a lightweight C# UI to monitor audio endpoint devices.
+SoundWinScanner is a sound device scanner engine that contains tools
+to detects and outputs plug-and-play audio endpoint devices under Windows.
+It handles audio notifications and device changes.
 
-SoundWinScanner detects and outputs plug-and-play audio endpoint devices under Windows. It handles audio notifications and device changes.
+It contains:
+- C/C++ sound agent core library SoundAgentLib
+- SoundAgentApi DLL, that provides a simple ANSI C API to the library for external clients
+- SoundDefaultUI, a lightweight C# UI monitor with SoundAgentApi as backend
+- sound-win-scanner, a Go-module that leverages SoundAgentApi for Go-clients
+- win-sound-logger, a simple CLI tool to log audio device information to the console, using SoundAgentApi as backend
 
 ## Modules Generated
 
