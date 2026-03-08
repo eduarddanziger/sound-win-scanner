@@ -22,35 +22,16 @@ SoundWinScanner detects and outputs plug-and-play audio endpoint devices under W
 
 ## Usage
 
-### Usage of RabbitMQ To REST API Forwarder in SoundWinScanner
-
-1. Install RabbitMQ via chocolatey. If didn't install chocolatey yet, please follow [Chocolatey](https://chocolatey.org/install)
-
-```powershell
-# Install RabbitMQ via chocolatey (elevated, as admin)
-choco install rabbitmq
-```
-
-2. Download and unzip the latest release of RabbitMQ-To REST-API-Forwarder: RmqToRestApiForwarder-x.x.x. from
-the latest release's assets, [RmqToRestApiForwarder Release](https://github.com/eduarddanziger/rmq-to-rest-api-forwarder/releases/latest)
-3. Register RmqToRestApiForwarder.exe as a Windows Service and start it:
-
-```powershell
-# Register (elevated, as admin) and start the RMQ-To-RESTAPI-Forwarder Windows Service
-sc create RmqToRestApiForwarder binPath="<your folder>\RmqToRestApiForwarder.exe" start=auto
-sc start RmqToRestApiForwarder
-```
-
 ### SoundDefaultUI
 1. Download and unzip the latest rollout of SoundDefaultUI-x.x.x. from the latest repository
 release's assets, [Release](https://github.com/collect-sound-devices/sound-win-scanner/releases/latest)
 
 2. Install certificates and unblock the SoundDefaultUI.exe per PowerShell (start as Administrator):
 
-```powershell
-   Import-Certificate -FilePath .\CodeSign.cer -CertStoreLocation Cert:\LocalMachine\Root
-   Unblock-File -Path .\SoundDefaultUI.exe
-```
+  ```powershell
+     Import-Certificate -FilePath .\CodeSign.cer -CertStoreLocation Cert:\LocalMachine\Root
+     Unblock-File -Path .\SoundDefaultUI.exe
+  ```
 3. Run the SoundDefaultUI
 
 ## Developer Environment, How to Build:
