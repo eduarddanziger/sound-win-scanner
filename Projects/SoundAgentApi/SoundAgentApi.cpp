@@ -3,6 +3,7 @@
 #include "SoundAgentApi.h"
 
 #include "public/SoundAgentInterface.h"
+#include "OsInfo.h"
 #include "ApiClient/common/ClassDefHelper.h"
 
 #include "VersionInformation.h"
@@ -174,6 +175,21 @@ SaaResult SaaGetDefaultCapture([[maybe_unused]] SaaHandle handle, SaaDescription
     const auto pnpId = device_collection->GetDefaultCaptureDevicePnpId();
 
     return GetDeviceOnPnpId(description, pnpId);
+}
+
+SaaResult SaaGetOperationSystemName([[maybe_unused]] SaaHandle handle, SaaOsInfo* osInfo)
+{
+    if (osInfo == nullptr)
+    {
+        return 0;
+    }
+
+    std::ranges::fill(osInfo->Name, '\0');
+
+    const auto operationSystemName = ed::audio::GetOperationSystemName();
+    strncpy_s(osInfo->Name, _countof(osInfo->Name), operationSystemName.c_str(), _TRUNCATE);
+
+    return 0;
 }
 
 namespace

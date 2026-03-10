@@ -63,6 +63,9 @@
     <ClInclude Include="ApiClient\common\SpdLogger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OsInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ApiClient\common\StringUtils.cpp">
@@ -73,6 +76,9 @@
     </ClCompile>
     <ClCompile Include="SoundDevice.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OsInfo.cpp">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
