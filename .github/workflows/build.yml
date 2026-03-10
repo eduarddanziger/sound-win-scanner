@@ -67,15 +67,12 @@ jobs:
         with:
           go-version: '1.22.x'
 
-      - name: Restore NuGets
-        run: nuget restore SoundWinScanner.sln
-
       - name: Integrate vcpkg with MSBuild
         run: vcpkg integrate install
 
       - name: Build with MSBuild
         run: |
-          msbuild /p:Configuration=Release /p:VcpkgEnabled=true /p:VcpkgManifestPath=vcpkg.json /p:VcpkgTriplet=x64-windows-static /target:Rebuild -restore
+          msbuild /p:Configuration=Release /p:VcpkgEnabled=true /p:VcpkgManifestPath=vcpkg.json /p:VcpkgTriplet=x64-windows-static /target:Rebuild -restore /p:RestorePackagesConfig=true
           dotnet publish "Projects/SoundDefaultUI/SoundDefaultUI.csproj" -c Release -p:PublishProfile=FolderProfile -v:minimal
 
       - name: Upload artifacts

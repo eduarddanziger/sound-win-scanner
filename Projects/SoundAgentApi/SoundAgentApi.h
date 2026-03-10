@@ -43,6 +43,11 @@
         UINT16 CaptureVolume;      /**< Current capture volume (implementation units). */
     } SaaDescription;
 
+    /** OS info. */
+    typedef struct {
+        CHAR   Name[256];          /**< Extended operating system name. */
+    } SaaOsInfo;
+
     /** Log message forwarded from internal logger. */
     typedef struct {
         CHAR Timestamp[32]; /**< Timestamp string. */
@@ -105,6 +110,13 @@
         SaaResult __stdcall SaaGetDefaultCapture(
             _In_ SaaHandle handle,
             _Out_ SaaDescription* description
+        );
+
+    /** Get operating system name (or zeroed struct if unavailable). osInfo must be non-null. */
+    SAA_EXPORT_IMPORT_DECL
+        SaaResult __stdcall SaaGetOperationSystemName(
+            _In_ SaaHandle handle,
+            _Out_ SaaOsInfo* osInfo
         );
 
     /** Uninitialize library. Invalidate handle. Safe to call multiple times (idempotent). */

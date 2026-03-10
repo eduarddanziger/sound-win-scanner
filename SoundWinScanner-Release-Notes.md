@@ -11,6 +11,7 @@ Released on $date$
 ~~~
 
 ## Changes
+- Latest C++ compiler from Visual Studio 2026, logging improvements, and code cleanup
 - sound-win-scanner.go module generated
 
 4.0.0

@@ -61,6 +61,7 @@
     <ClInclude Include="ApiClient\common\SpdLogger\LogBuffer.h" />
     <ClInclude Include="ApiClient\common\SpdLogger\Logger.h" />
     <ClInclude Include="ApiClient\common\ClassDefHelper.h" />
+    <ClInclude Include="OsInfo.h" />
     <ClInclude Include="public\CoInitRaiiHelper.h" />
     <ClInclude Include="public\generate-uuid.h" />
     <ClInclude Include="public\SoundAgentInterface.h" />
@@ -74,6 +75,7 @@
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="OsInfo.cpp" />
     <ClCompile Include="SoundDevice.cpp" />
     <ClCompile Include="SoundDeviceCollection.cpp" />
     <ClCompile Include="ApiClient\common\StringUtils.cpp" />

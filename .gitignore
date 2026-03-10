@@ -282,3 +282,4 @@ go/*/*
 !go/*/go.mod
 
 .idea/
+/.github/copilot-instructions.md

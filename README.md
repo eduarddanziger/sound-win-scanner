@@ -1,8 +1,15 @@
 # Sound Windows Scanner (SoundWinScanner)
 
-SoundWinScanner is a sound device scanner engine that contains C/C++ sound agent core library with its DLL- and a Go-module-frontends, and a lightweight C# UI to monitor audio endpoint devices.
+SoundWinScanner is a sound device scanner engine that contains tools
+to detects and outputs plug-and-play audio endpoint devices under Windows.
+It handles audio notifications and device changes.
 
-SoundWinScanner detects and outputs plug-and-play audio endpoint devices under Windows. It handles audio notifications and device changes.
+It contains:
+- C/C++ sound agent core library SoundAgentLib
+- SoundAgentApi DLL, that provides a simple ANSI C API to the library for external clients
+- SoundDefaultUI, a lightweight C# UI monitor with SoundAgentApi as backend
+- sound-win-scanner, a Go-module that leverages SoundAgentApi for Go-clients
+- win-sound-logger, a simple CLI tool to log audio device information to the console, using SoundAgentApi as backend
 
 ## Modules Generated
 
@@ -17,40 +24,20 @@ SoundWinScanner detects and outputs plug-and-play audio endpoint devices under W
 ## Technologies Used
 
 - **C++ / Go**: Core logic implementation.
-- **RabbitMQ**: Used as a message broker for reliable audio device information delivery.
 - **C# / WPF**: Lightweight UI for displaying live volume levels of the currently default audio devices.
 
-## Usage
+## SoundDefaultUI
 
-### Usage of RabbitMQ To REST API Forwarder in SoundWinScanner
-
-1. Install RabbitMQ via chocolatey. If didn't install chocolatey yet, please follow [Chocolatey](https://chocolatey.org/install)
-
-```powershell
-# Install RabbitMQ via chocolatey (elevated, as admin)
-choco install rabbitmq
-```
-
-2. Download and unzip the latest release of RabbitMQ-To REST-API-Forwarder: RmqToRestApiForwarder-x.x.x. from
-the latest release's assets, [RmqToRestApiForwarder Release](https://github.com/eduarddanziger/rmq-to-rest-api-forwarder/releases/latest)
-3. Register RmqToRestApiForwarder.exe as a Windows Service and start it:
-
-```powershell
-# Register (elevated, as admin) and start the RMQ-To-RESTAPI-Forwarder Windows Service
-sc create RmqToRestApiForwarder binPath="<your folder>\RmqToRestApiForwarder.exe" start=auto
-sc start RmqToRestApiForwarder
-```
-
-### SoundDefaultUI
+### Get and run latest release:
 1. Download and unzip the latest rollout of SoundDefaultUI-x.x.x. from the latest repository
 release's assets, [Release](https://github.com/collect-sound-devices/sound-win-scanner/releases/latest)
 
 2. Install certificates and unblock the SoundDefaultUI.exe per PowerShell (start as Administrator):
 
-```powershell
-   Import-Certificate -FilePath .\CodeSign.cer -CertStoreLocation Cert:\LocalMachine\Root
-   Unblock-File -Path .\SoundDefaultUI.exe
-```
+    ```powershell
+    Import-Certificate -FilePath .\CodeSign.cer -CertStoreLocation Cert:\LocalMachine\Root
+    Unblock-File -Path .\SoundDefaultUI.exe
+    ```
 3. Run the SoundDefaultUI
 
 ## Developer Environment, How to Build:
@@ -67,8 +54,7 @@ release's assets, [Release](https://github.com/collect-sound-devices/sound-win-s
 1. Install Visual Studio 2026
 2. Build the solution, e.g. if you use Visual Studio Community Edition:
 ```powershell
-%NuGet% restore SoundWinScanner.sln
-"c:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe" SoundWinScanner.sln /p:Configuration=Release /target:Rebuild -restore
+&"c:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe" SoundWinScanner.sln /target:Rebuild -restore /p:Configuration=Release /p:RestorePackagesConfig=true
 ```
 
 ## License
