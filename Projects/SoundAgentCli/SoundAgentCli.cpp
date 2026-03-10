@@ -2,36 +2,16 @@
 
 #include "ApiClient/common/TimeUtil.h"
 
+#include "OsInfo.h"
 #include "public/CoInitRaiiHelper.h"
 #include "public/SoundAgentInterface.h"
 
 #include <filesystem>
 #include <memory>
 #include <tchar.h>
-#include <magic_enum/magic_enum_iostream.hpp>
+#include <magic_enum/magic_enum.hpp>
 
 #include "ApiClient/common/SpdLogger.h"
-
-
-namespace
-{
-    std::ostream& CurrentLocalTimeAsStringShort(std::ostream& os) {
-        const std::string currentTime = ed::TimePointToStringAsLocal(
-            std::chrono::system_clock::now(),
-            false, // insertTBetweenDateAndTime
-            false // addTimeZone
-        );
-        if
-        (
-            constexpr int beginOfTimeCountingFromTheEnd = 15;
-            currentTime.size() >= beginOfTimeCountingFromTheEnd
-        )
-        {
-            os << currentTime.substr(currentTime.size() - beginOfTimeCountingFromTheEnd, 12) << " ";
-        }
-        return os;
-    }
-}
 
 
 class ServiceObserver final : public SoundDeviceObserverInterface {
@@ -63,6 +43,9 @@ public:
         {
             spdlog::warn("Logging set-up partially done; Log file can not be used: {}.", ex.what());
         }
+
+        spdlog::info("Operation system: {}.", ed::audio::GetOperationSystemName());
+
     }
 
 
@@ -72,15 +55,14 @@ public:
 public:
     static void PrintDeviceInfo(const SoundDeviceInterface* device, size_t i)
     {
-        using magic_enum::iostream_operators::operator<<;
-
         const auto idString = device->GetPnpId();
-        std::cout << CurrentLocalTimeAsStringShort << "[" << i << "]: " << idString
-            << ", \"" << device->GetName()
-            << "\", " << device->GetFlow() // magic to string
-            << ", Volume " << device->GetCurrentRenderVolume()
-            << " / " << device->GetCurrentCaptureVolume()
-            << '\n';
+        spdlog::info("[{}]: {}, \"{}\", {}, Volume {} / {}",
+            i,
+            idString,
+            device->GetName(),
+            magic_enum::enum_name(device->GetFlow()),
+            device->GetCurrentRenderVolume(),
+            device->GetCurrentCaptureVolume());
     }
 
     void PrintCollection() const
@@ -90,27 +72,26 @@ public:
             const std::unique_ptr<SoundDeviceInterface> deviceSmartPtr(collection_.CreateItem(i));
             PrintDeviceInfo(deviceSmartPtr.get(), i);
         }
-        std::cout << CurrentLocalTimeAsStringShort << "...Collection print finished.";
+        spdlog::info("");
     }
 
     void ResetCollectionContentAndPrintIt() const
     {
-        std::cout << CurrentLocalTimeAsStringShort << "Regenerating device list.\n";
+        spdlog::info("Regenerating device list.");
         collection_.ResetContent();
         PrintCollection();
-        std::cout << '\n' << CurrentLocalTimeAsStringShort << "Press Enter to regenerate device list; To stop, type S or Q and press Enter\n";
+        spdlog::info("Press Enter to regenerate device list; To stop, type S or Q and press Enter");
     }
 
     void OnCollectionChanged(SoundDeviceEventType event, const std::string& devicePnpId) override
     {
-        using magic_enum::iostream_operators::operator<<; // out-of-the-box stream operators for enums
+        spdlog::info("Event caught: {}. Device PnP id: {}",
+            magic_enum::enum_name(event),
+            devicePnpId);
 
-        std::cout << '\n' << CurrentLocalTimeAsStringShort << "Event caught: " << event << "."
-            <<  " Device PnP id: " << devicePnpId << '\n';
-
-        std::cout << '\n' << CurrentLocalTimeAsStringShort << "Print collection...\n";
+        spdlog::info("Print collection...");
         PrintCollection();
-        std::cout << '\n' << CurrentLocalTimeAsStringShort << "Press Enter to regenerate device list; To stop, type S or Q and press Enter\n";
+        spdlog::info("Press Enter to regenerate device list; To stop, type S or Q and press Enter");
     }
 
 private:
@@ -134,7 +115,7 @@ namespace
                 return true;
             }
 
-            std::cout << '\n' << CurrentLocalTimeAsStringShort << "Input " << line << " not recognized.\n";
+            spdlog::info("Input {} not recognized.", line);
         }
     }
 }
@@ -163,7 +144,7 @@ int _tmain(int argc, _TCHAR * argv[])
         continueLoop = StopAndWaitForInput();
     }
 
-    std::cout << '\n' << CurrentLocalTimeAsStringShort << "Print collection final state...\n";
+    spdlog::info("Print collection final state...");
     o.PrintCollection();
 
     coll->Unsubscribe(o);
