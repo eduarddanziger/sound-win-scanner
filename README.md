@@ -24,21 +24,20 @@ It contains:
 ## Technologies Used
 
 - **C++ / Go**: Core logic implementation.
-- **RabbitMQ**: Used as a message broker for reliable audio device information delivery.
 - **C# / WPF**: Lightweight UI for displaying live volume levels of the currently default audio devices.
 
-## Usage
+## SoundDefaultUI
 
-### SoundDefaultUI
+### Get and run latest release:
 1. Download and unzip the latest rollout of SoundDefaultUI-x.x.x. from the latest repository
 release's assets, [Release](https://github.com/collect-sound-devices/sound-win-scanner/releases/latest)
 
 2. Install certificates and unblock the SoundDefaultUI.exe per PowerShell (start as Administrator):
 
-  ```powershell
-     Import-Certificate -FilePath .\CodeSign.cer -CertStoreLocation Cert:\LocalMachine\Root
-     Unblock-File -Path .\SoundDefaultUI.exe
-  ```
+    ```powershell
+    Import-Certificate -FilePath .\CodeSign.cer -CertStoreLocation Cert:\LocalMachine\Root
+    Unblock-File -Path .\SoundDefaultUI.exe
+    ```
 3. Run the SoundDefaultUI
 
 ## Developer Environment, How to Build:
@@ -55,8 +54,7 @@ release's assets, [Release](https://github.com/collect-sound-devices/sound-win-s
 1. Install Visual Studio 2026
 2. Build the solution, e.g. if you use Visual Studio Community Edition:
 ```powershell
-%NuGet% restore SoundWinScanner.sln
-"c:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe" SoundWinScanner.sln /p:Configuration=Release /target:Rebuild -restore
+&"c:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe" SoundWinScanner.sln /target:Rebuild -restore /p:Configuration=Release /p:RestorePackagesConfig=true
 ```
 
 ## License
