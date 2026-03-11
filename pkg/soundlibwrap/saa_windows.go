@@ -42,16 +42,16 @@ type VolumeChangedCallback func()
 
 // Handlers set by app.
 var (
-	logHandler     GotLogMessageCallback
-	renderHandler  DefaultChangedCallback
-	captureHandler DefaultChangedCallback
+	logHandler           GotLogMessageCallback
+	renderHandler        DefaultChangedCallback
+	captureHandler       DefaultChangedCallback
 	renderVolumeHandler  VolumeChangedCallback
 	captureVolumeHandler VolumeChangedCallback
 )
 
-func SetLogHandler(h GotLogMessageCallback)             { logHandler = h }
-func SetDefaultRenderHandler(h DefaultChangedCallback)  { renderHandler = h }
-func SetDefaultCaptureHandler(h DefaultChangedCallback) { captureHandler = h }
+func SetLogHandler(h GotLogMessageCallback)                  { logHandler = h }
+func SetDefaultRenderHandler(h DefaultChangedCallback)       { renderHandler = h }
+func SetDefaultCaptureHandler(h DefaultChangedCallback)      { captureHandler = h }
 func SetRenderVolumeChangedHandler(h VolumeChangedCallback)  { renderVolumeHandler = h }
 func SetCaptureVolumeChangedHandler(h VolumeChangedCallback) { captureVolumeHandler = h }
 
@@ -132,6 +132,15 @@ func GetDefaultCapture(h Handle) (Description, error) {
 		return Description{}, fmt.Errorf("SaaGetDefaultCapture failed: rc=%d", int32(rc))
 	}
 	return fromCDesc(&cd), nil
+}
+
+func GetExtendedOperatingSystemName(h Handle) (string, error) {
+	var osInfo C.SaaOsInfo
+	rc := C.SaaGetOperationSystemName(C.SaaHandle(h), &osInfo)
+	if rc != 0 {
+		return "", fmt.Errorf("SaaGetOperationSystemName failed: rc=%d", int32(rc))
+	}
+	return C.GoString(&osInfo.Name[0]), nil
 }
 
 func Uninitialize(h Handle) error {

@@ -34,7 +34,7 @@
     typedef INT32 SaaResult;
 
     /** Result code values returned in ::SaaResult. */
-    typedef enum SAA_EXPORT_IMPORT_DECL SaaResultCodeTag {
+    typedef enum {
         SaaResultCodeSuccess = 0,
         SaaResultCodeInvalidArgument = 1,
         SaaResultCodeInvalidHandle = 2,
@@ -64,7 +64,7 @@
     } SaaLogMessage;
 
     /** Default device / volume change notification event type. */
-    typedef enum SAA_EXPORT_IMPORT_DECL SaaEventTypeTag {
+    typedef enum {
         SaaDefaultRenderAttached = 0,
         SaaDefaultCaptureAttached = 1,
         SaaDefaultRenderDetached = 2,
