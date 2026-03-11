@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 
 #include "SoundAgentApi.h"
 
@@ -133,13 +133,24 @@ SaaResult SaaInitialize(SaaHandle* handle,
     const CHAR* appVersion
 )
 {
+    if (handle == nullptr)
+    {
+        return SaaResultCodeInvalidArgument;
+    }
+
+    *handle = 0;
+
     SetUpLog(gotLogMessageCallback, appName, appVersion);
 
     auto context = std::make_unique<HandleContext>();
     context->DeviceCollection = SoundAgent::CreateDeviceCollection();
+    if (context->DeviceCollection == nullptr)
+    {
+        return SaaResultCodeInternalError;
+    }
     *handle = reinterpret_cast<SaaHandle>(context.release());
 
-    return 0;
+    return SaaResultCodeSuccess;
 }
 
 SaaResult SaaRegisterCallbacks(SaaHandle handle
@@ -150,7 +161,7 @@ SaaResult SaaRegisterCallbacks(SaaHandle handle
     const auto context = GetHandleContextOrNull(handle);
     if (context == nullptr || context->DeviceCollection == nullptr)
     {
-        return 0;
+        return SaaResultCodeInvalidHandle;
     }
 
     if (context->DeviceCollectionObserver != nullptr)
@@ -164,7 +175,7 @@ SaaResult SaaRegisterCallbacks(SaaHandle handle
     context->DeviceCollection->Subscribe(*context->DeviceCollectionObserver);
     context->DeviceCollection->ResetContent();
 
-    return 0;
+    return SaaResultCodeSuccess;
 }
 
 namespace
@@ -179,12 +190,12 @@ SaaResult SaaGetDefaultRender(SaaHandle handle, SaaDescription* description)
 {
     if (description == nullptr)
     {
-        return 0;
+        return SaaResultCodeInvalidArgument;
     }
     const auto context = GetHandleContextOrNull(handle);
     if (context == nullptr || context->DeviceCollection == nullptr)
     {
-        return 0;
+        return SaaResultCodeInvalidHandle;
     }
     const auto pnpId = context->DeviceCollection->GetDefaultRenderDevicePnpId();
 
@@ -195,12 +206,12 @@ SaaResult SaaGetDefaultCapture(SaaHandle handle, SaaDescription* description)
 {
     if (description == nullptr)
     {
-        return 0;
+        return SaaResultCodeInvalidArgument;
     }
     const auto context = GetHandleContextOrNull(handle);
     if (context == nullptr || context->DeviceCollection == nullptr)
     {
-        return 0;
+        return SaaResultCodeInvalidHandle;
     }
     const auto pnpId = context->DeviceCollection->GetDefaultCaptureDevicePnpId();
 
@@ -211,12 +222,12 @@ SaaResult SaaGetOperationSystemName(SaaHandle handle, SaaOsInfo* osInfo)
 {
     if (osInfo == nullptr)
     {
-        return 0;
+        return SaaResultCodeInvalidArgument;
     }
 
     if (GetHandleContextOrNull(handle) == nullptr)
     {
-        return 0;
+        return SaaResultCodeInvalidHandle;
     }
 
     std::ranges::fill(osInfo->Name, '\0');
@@ -224,7 +235,7 @@ SaaResult SaaGetOperationSystemName(SaaHandle handle, SaaOsInfo* osInfo)
     const auto operationSystemName = ed::audio::GetOperationSystemName();
     strncpy_s(osInfo->Name, _countof(osInfo->Name), operationSystemName.c_str(), _TRUNCATE);
 
-    return 0;
+    return SaaResultCodeSuccess;
 }
 
 namespace
@@ -262,9 +273,9 @@ namespace
                 description->RenderVolume = device->GetCurrentRenderVolume();
                 description->CaptureVolume = device->GetCurrentCaptureVolume();
             }
-            return 0;
+            return SaaResultCodeSuccess;
         }
-        return 0;
+        return SaaResultCodeSuccess;
     }
 }
 
@@ -281,5 +292,5 @@ SaaResult SaaUnInitialize(SaaHandle handle)
         context->DeviceCollection.reset();
         delete context;
     }
-    return 0;
+    return SaaResultCodeSuccess;
 }

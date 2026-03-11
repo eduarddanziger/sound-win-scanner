@@ -10,7 +10,7 @@
  * 3. Call ::SaaGetDefaultRender / ::SaaGetDefaultCapture to query devices.
  * 4. Call ::SaaUnInitialize before exit / unloading.
  * Threading: Serialize initialize/uninitialize. Callbacks may fire on worker thread; keep them fast and thread-safe.
- * Errors: 0 = success (non‑zero reserved).
+ * Errors: 0 = success. See ::SaaResultCode for named values.
  * Strings: ANSI, truncated with null terminator.
  * Logging: Supply log callback at init to receive async log messages.
  */
@@ -30,8 +30,16 @@
     /** Opaque instance handle (do not interpret). Obtained via ::SaaInitialize. */
     typedef DWORD64 SaaHandle;
 
-    /** Result code. 0 = success. Future values reserved. */
+    /** Result code storage type. See ::SaaResultCode for named values. */
     typedef INT32 SaaResult;
+
+    /** Result code values returned in ::SaaResult. */
+    typedef enum SAA_EXPORT_IMPORT_DECL SaaResultCodeTag {
+        SaaResultCodeSuccess = 0,
+        SaaResultCodeInvalidArgument = 1,
+        SaaResultCodeInvalidHandle = 2,
+        SaaResultCodeInternalError = 3
+    } SaaResultCode;
 
     /** Device description. Unused fields zeroed. BOOL uses Win32 TRUE/FALSE. */
     typedef struct {
@@ -56,7 +64,7 @@
     } SaaLogMessage;
 
     /** Default device / volume change notification event type. */
-    typedef enum {
+    typedef enum SAA_EXPORT_IMPORT_DECL SaaEventTypeTag {
         SaaDefaultRenderAttached = 0,
         SaaDefaultCaptureAttached = 1,
         SaaDefaultRenderDetached = 2,

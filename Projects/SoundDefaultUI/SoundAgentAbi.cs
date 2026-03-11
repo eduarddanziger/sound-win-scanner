@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
 namespace SoundDefaultUI;
 
@@ -35,7 +35,8 @@ public struct SaaLogMessage
     public byte[] Content; // UTF-8 encoded string
 }
 
-public enum SaaEventType
+// ReSharper disable once EnumUnderlyingTypeIsInt
+public enum SaaEventType : int
 {
     SaaDefaultRenderAttached = 0,
     SaaDefaultCaptureAttached = 1,
@@ -43,6 +44,15 @@ public enum SaaEventType
     SaaDefaultCaptureDetached = 3,
     SaaVolumeRenderChanged = 4,
     SaaVolumeCaptureChanged = 5
+}
+
+// ReSharper disable once EnumUnderlyingTypeIsInt
+public enum SaaResult : int
+{
+    SaaResultCodeSuccess = 0,
+    SaaResultCodeInvalidArgument = 1,
+    SaaResultCodeInvalidHandle = 2,
+    SaaResultCodeInternalError = 3
 }
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
@@ -59,7 +69,7 @@ internal static class SoundAgentApi
 #pragma warning disable SYSLIB1054 // Warning for DllImport -> LibraryImport
 #pragma warning disable CA2101 // Specify marshaling for P/Invoke string arguments
     [DllImport("SoundAgentApi.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-    internal static extern int SaaInitialize(
+    internal static extern SaaResult SaaInitialize(
         out ulong handle,
         SaaGotLogMessageDelegate? gotLogMessageCallback,
         string? appName,
@@ -68,26 +78,26 @@ internal static class SoundAgentApi
     );
 
     [DllImport("SoundAgentApi.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-    internal static extern int SaaRegisterCallbacks(
+    internal static extern SaaResult SaaRegisterCallbacks(
         ulong handle,
         SaaDefaultChangedDelegate? defaultRenderChangedCallback,
         SaaDefaultChangedDelegate? defaultCaptureChangedCallback
     );
 
     [DllImport("SoundAgentApi.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-    internal static extern int SaaGetDefaultRender(
+    internal static extern SaaResult SaaGetDefaultRender(
         ulong handle,
         out SaaDescription description
     );
 
     [DllImport("SoundAgentApi.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-    internal static extern int SaaGetDefaultCapture(
+    internal static extern SaaResult SaaGetDefaultCapture(
         ulong handle,
         out SaaDescription description
     );
 
     [DllImport("SoundAgentApi.dll", CallingConvention = CallingConvention.StdCall)]
-    internal static extern int SaaUnInitialize(
+    internal static extern SaaResult SaaUnInitialize(
         ulong handle
     );
 }
