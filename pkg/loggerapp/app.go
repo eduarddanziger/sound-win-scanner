@@ -2,10 +2,11 @@ package loggerapp
 
 import (
 	"context"
-	"github.com/collect-sound-devices/sound-win-scanner/v4/pkg/soundlibwrap"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/collect-sound-devices/sound-win-scanner/v4/pkg/soundlibwrap"
 	//	"github.com/collect-sound-devices/sound-win-scanner/pkg/soundlibwrap"
 )
 
@@ -106,6 +107,12 @@ func Run(ctx context.Context) error {
 
 	if err := soundlibwrap.RegisterCallbacks(SaaHandle); err != nil {
 		return err
+	}
+
+	if osName, err := soundlibwrap.GetExtendedOperatingSystemName(SaaHandle); err == nil {
+		logInfo("Operating system: %q", osName)
+	} else {
+		logError("Operating system info, can not read it: %v", err)
 	}
 
 	// Print the default render and capture devices.

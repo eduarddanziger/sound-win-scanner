@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 
 #include "SoundAgentApi.h"
 
@@ -14,11 +14,25 @@
 
 #include "ApiClient/common/SpdLogger/Logger.h"
 
+namespace {
+    struct HandleContext {
+        std::unique_ptr<SoundDeviceCollectionInterface> DeviceCollection;
+        std::unique_ptr<SoundDeviceObserverInterface> DeviceCollectionObserver;
+    };
+
+    HandleContext* GetHandleContextOrNull(const SaaHandle handle)
+    {
+        return reinterpret_cast<HandleContext*>(handle);
+    }
+}
+
 class DllObserver final : public SoundDeviceObserverInterface {
 public:
-    explicit DllObserver(TSaaDefaultChangedCallback defaultRenderChangedCallback
+    explicit DllObserver(SoundDeviceCollectionInterface* deviceCollection
+        , TSaaDefaultChangedCallback defaultRenderChangedCallback
         , TSaaDefaultChangedCallback defaultCaptureChangedCallback)
-        : defaultRenderChangedCallback_(defaultRenderChangedCallback)
+        : deviceCollection_(deviceCollection)
+        , defaultRenderChangedCallback_(defaultRenderChangedCallback)
         , defaultCaptureChangedCallback_(defaultCaptureChangedCallback)
     {
     }
@@ -28,16 +42,12 @@ public:
     void OnCollectionChanged(SoundDeviceEventType event, const std::string& devicePnpId) override;
 
 private:
+    SoundDeviceCollectionInterface* deviceCollection_;
     TSaaDefaultChangedCallback defaultRenderChangedCallback_;
     TSaaDefaultChangedCallback defaultCaptureChangedCallback_;
 };
 
 DllObserver::~DllObserver() = default;
-
-namespace {
-    std::unique_ptr< SoundDeviceCollectionInterface> device_collection;
-    std::unique_ptr<SoundDeviceObserverInterface> device_collection_observer;
-}
 
 
 void DllObserver::OnCollectionChanged(SoundDeviceEventType event, const std::string& devicePnpId)
@@ -50,7 +60,7 @@ void DllObserver::OnCollectionChanged(SoundDeviceEventType event, const std::str
         }
         if (
             (event == SoundDeviceEventType::VolumeRenderChanged || event == SoundDeviceEventType::VolumeCaptureChanged)
-            && device_collection != nullptr && device_collection->GetDefaultRenderDevicePnpId() == devicePnpId
+            && deviceCollection_ != nullptr && deviceCollection_->GetDefaultRenderDevicePnpId() == devicePnpId
         )
         {
             defaultRenderChangedCallback_(event == SoundDeviceEventType::VolumeRenderChanged
@@ -66,7 +76,7 @@ void DllObserver::OnCollectionChanged(SoundDeviceEventType event, const std::str
         }
         if (
             (event == SoundDeviceEventType::VolumeCaptureChanged || event == SoundDeviceEventType::VolumeRenderChanged)
-            && device_collection != nullptr && device_collection->GetDefaultCaptureDevicePnpId() == devicePnpId
+            && deviceCollection_ != nullptr && deviceCollection_->GetDefaultCaptureDevicePnpId() == devicePnpId
         )
         {
             defaultCaptureChangedCallback_(event == SoundDeviceEventType::VolumeCaptureChanged
@@ -123,65 +133,101 @@ SaaResult SaaInitialize(SaaHandle* handle,
     const CHAR* appVersion
 )
 {
+    if (handle == nullptr)
+    {
+        return SaaResultCodeInvalidArgument;
+    }
+
+    *handle = 0;
+
     SetUpLog(gotLogMessageCallback, appName, appVersion);
 
-    device_collection = SoundAgent::CreateDeviceCollection();
-    *handle = reinterpret_cast<SaaHandle>(device_collection.get());
+    auto context = std::make_unique<HandleContext>();
+    context->DeviceCollection = SoundAgent::CreateDeviceCollection();
+    if (context->DeviceCollection == nullptr)
+    {
+        return SaaResultCodeInternalError;
+    }
+    *handle = reinterpret_cast<SaaHandle>(context.release());
 
-    return 0;
+    return SaaResultCodeSuccess;
 }
 
-SaaResult SaaRegisterCallbacks([[maybe_unused]] SaaHandle handle
+SaaResult SaaRegisterCallbacks(SaaHandle handle
     , TSaaDefaultChangedCallback defaultRenderChangedCallback
     , TSaaDefaultChangedCallback defaultCaptureChangedCallback
 )
 {
-    if (device_collection_observer != nullptr)
+    const auto context = GetHandleContextOrNull(handle);
+    if (context == nullptr || context->DeviceCollection == nullptr)
     {
-        device_collection->Unsubscribe(*device_collection_observer);
+        return SaaResultCodeInvalidHandle;
     }
 
-    device_collection_observer = std::make_unique<DllObserver>(defaultRenderChangedCallback,
-        defaultCaptureChangedCallback);
-    device_collection->Subscribe(*device_collection_observer);
-    device_collection->ResetContent();
+    if (context->DeviceCollectionObserver != nullptr)
+    {
+        context->DeviceCollection->Unsubscribe(*context->DeviceCollectionObserver);
+    }
 
-    return 0;
+    context->DeviceCollectionObserver = std::make_unique<DllObserver>(context->DeviceCollection.get(),
+        defaultRenderChangedCallback,
+        defaultCaptureChangedCallback);
+    context->DeviceCollection->Subscribe(*context->DeviceCollectionObserver);
+    context->DeviceCollection->ResetContent();
+
+    return SaaResultCodeSuccess;
 }
 
 namespace
 {
-    SaaResult GetDeviceOnPnpId(SaaDescription* description, const std::optional<std::string>& pnpId);
+    SaaResult GetDeviceOnPnpId(const SoundDeviceCollectionInterface* deviceCollection,
+        SaaDescription* description,
+        const std::optional<std::string>& pnpId);
 }
 
 
-SaaResult SaaGetDefaultRender([[maybe_unused]] SaaHandle handle, SaaDescription* description)
+SaaResult SaaGetDefaultRender(SaaHandle handle, SaaDescription* description)
 {
     if (description == nullptr)
     {
-        return 0;
+        return SaaResultCodeInvalidArgument;
     }
-    const auto pnpId = device_collection->GetDefaultRenderDevicePnpId();
+    const auto context = GetHandleContextOrNull(handle);
+    if (context == nullptr || context->DeviceCollection == nullptr)
+    {
+        return SaaResultCodeInvalidHandle;
+    }
+    const auto pnpId = context->DeviceCollection->GetDefaultRenderDevicePnpId();
 
-    return GetDeviceOnPnpId(description, pnpId);
+    return GetDeviceOnPnpId(context->DeviceCollection.get(), description, pnpId);
 }
 
-SaaResult SaaGetDefaultCapture([[maybe_unused]] SaaHandle handle, SaaDescription* description)
+SaaResult SaaGetDefaultCapture(SaaHandle handle, SaaDescription* description)
 {
     if (description == nullptr)
     {
-        return 0;
+        return SaaResultCodeInvalidArgument;
     }
-    const auto pnpId = device_collection->GetDefaultCaptureDevicePnpId();
+    const auto context = GetHandleContextOrNull(handle);
+    if (context == nullptr || context->DeviceCollection == nullptr)
+    {
+        return SaaResultCodeInvalidHandle;
+    }
+    const auto pnpId = context->DeviceCollection->GetDefaultCaptureDevicePnpId();
 
-    return GetDeviceOnPnpId(description, pnpId);
+    return GetDeviceOnPnpId(context->DeviceCollection.get(), description, pnpId);
 }
 
-SaaResult SaaGetOperationSystemName([[maybe_unused]] SaaHandle handle, SaaOsInfo* osInfo)
+SaaResult SaaGetOperationSystemName(SaaHandle handle, SaaOsInfo* osInfo)
 {
     if (osInfo == nullptr)
     {
-        return 0;
+        return SaaResultCodeInvalidArgument;
+    }
+
+    if (GetHandleContextOrNull(handle) == nullptr)
+    {
+        return SaaResultCodeInvalidHandle;
     }
 
     std::ranges::fill(osInfo->Name, '\0');
@@ -189,12 +235,14 @@ SaaResult SaaGetOperationSystemName([[maybe_unused]] SaaHandle handle, SaaOsInfo
     const auto operationSystemName = ed::audio::GetOperationSystemName();
     strncpy_s(osInfo->Name, _countof(osInfo->Name), operationSystemName.c_str(), _TRUNCATE);
 
-    return 0;
+    return SaaResultCodeSuccess;
 }
 
 namespace
 {
-    SaaResult GetDeviceOnPnpId(SaaDescription* description, const std::optional<std::string>& pnpId)
+    SaaResult GetDeviceOnPnpId(const SoundDeviceCollectionInterface* deviceCollection,
+        SaaDescription* description,
+        const std::optional<std::string>& pnpId)
     {
         std::ranges::fill(description->PnpId, '\0');
         std::ranges::fill(description->Name, '\0');
@@ -202,9 +250,9 @@ namespace
         description->IsCapture = FALSE;
         description->RenderVolume = 0;
         description->CaptureVolume = 0;
-        if (pnpId.has_value())
+        if (deviceCollection != nullptr && pnpId.has_value())
         {
-            if (const auto device = device_collection->CreateItem(*pnpId)
+            if (const auto device = deviceCollection->CreateItem(*pnpId)
                 ; device != nullptr)
             {
                 {
@@ -225,23 +273,24 @@ namespace
                 description->RenderVolume = device->GetCurrentRenderVolume();
                 description->CaptureVolume = device->GetCurrentCaptureVolume();
             }
-            return 0;
+            return SaaResultCodeSuccess;
         }
-        return 0;
+        return SaaResultCodeSuccess;
     }
 }
 
 
 SaaResult SaaUnInitialize(SaaHandle handle)
 {
-    if(device_collection != nullptr)
+    if (const auto context = GetHandleContextOrNull(handle); context != nullptr)
     {
-        if (device_collection_observer != nullptr)
+        if (context->DeviceCollection != nullptr && context->DeviceCollectionObserver != nullptr)
         {
-            device_collection->Unsubscribe(*device_collection_observer);
-            device_collection_observer.reset();
+            context->DeviceCollection->Unsubscribe(*context->DeviceCollectionObserver);
+            context->DeviceCollectionObserver.reset();
         }
-        device_collection.reset();
+        context->DeviceCollection.reset();
+        delete context;
     }
-    return 0;
+    return SaaResultCodeSuccess;
 }
