@@ -20,8 +20,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
-        with:
-          submodules: true
 
       - name: Unshallow repository
         run: git fetch --prune --unshallow
@@ -69,6 +67,11 @@ jobs:
       GO_APP_NAME: win-sound-logger
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: true
+
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v3
 
