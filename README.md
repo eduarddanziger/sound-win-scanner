@@ -8,10 +8,67 @@ It contains:
 - C/C++ sound agent core library SoundAgentLib
 - SoundAgentApi DLL, that provides a simple ANSI C API to the library for external clients
 - SoundDefaultUI, a lightweight C# UI monitor with SoundAgentApi as backend
-- sound-win-scanner, a Go-module that leverages SoundAgentApi for Go-clients
-- win-sound-logger, a simple Go (Golang) CLI tool to log audio device information to the console, using SoundAgentApi as backend
+- **sound-win-scanner**, a Go-module that leverages SoundAgentApi for Go-clients
+- win-sound-logger, a simple Go CLI tool to log audio device information to the console, using SoundAgentApi as backend
 
-## Modules Generated
+## Architecture
+
+<div style="zoom: 0.5;">
+
+```mermaid
+flowchart BT
+
+classDef dottedBox fill:transparent, fill-opacity:0.55, stroke-dasharray:10 8, stroke-width:2px;
+classDef stressedBox fill:#f0f0f0, fill-opacity:0.2, stroke-dasharray:10 8, stroke-width:4px;
+classDef invisibleNode fill:transparent, stroke:transparent;
+
+coreAudioApi["Core Audio<br>(Windows API)"]
+
+subgraph scannerBackend["<b>sound-win-scanner (Go module)</b>"]
+    invisible3["<br><br><br><br><br>"]
+    class invisible3 invisibleNode
+    goCgoWrapper["SoundLibWrap<br>(Go package)"]
+    soundAgentApiDll["ANSI C SoundAgentApi.dll,<br>SoundDeviceCollection<br>(C++ class)"]
+    invisible4["<br><br><br><br><br>"]
+    class invisible4 invisibleNode
+end
+class scannerBackend stressedBox
+
+coreAudioApi -->|Device and volume change<br>notifications| soundAgentApiDll
+soundAgentApiDll --> |Read device characteristics| coreAudioApi
+
+subgraph scannerService["win-sound-scanner-go"]
+    invisible1["<br><br><br><br><br>"]
+    class invisible1 invisibleNode
+    winSoundScannerService["<b>WinSoundScanner</b><br>(Go Windows Service)"]
+    invisible2["<br><br><br><br><br>"]
+    class invisible2 invisibleNode
+end
+class scannerService dottedBox
+
+subgraph requestQueueMicroservice["<br>"]
+    requestQueue[("Request Queue<br>(RabbitMQ channel)")]
+    rabbitMqRestForwarder["RmqToRestApiForwarder<br>(.NET microservice)"]
+end
+class requestQueueMicroservice dottedBox
+
+deviceRepositoryApi["Device Repository Server<br>(REST API)"]
+
+winSoundScannerService --> |Access device| goCgoWrapper
+goCgoWrapper -->|Device events| winSoundScannerService
+
+goCgoWrapper --> |C API calls| soundAgentApiDll
+soundAgentApiDll -->|C / C++ callbacks| goCgoWrapper
+
+winSoundScannerService -->|Publish request messages| requestQueue
+
+requestQueue -->|Fetch request messages| rabbitMqRestForwarder
+rabbitMqRestForwarder --> |Detect request messages| requestQueue
+rabbitMqRestForwarder -->|POST/PUT requests| deviceRepositoryApi
+```
+</div>
+
+## Go Modules Generated
 
 - **sound-win-scanner**: Go module that wraps the C++ core logic and provides a Go API for [WinSoundScanner](https://github.com/collect-sound-devices/win-sound-scanner-go)
 
@@ -22,12 +79,7 @@ It contains:
 - **SoundAgentCli**: Command-line test CLI.
 - **win-sound-logger.exe**: Simple Go test CLI that logs the current default audio devices and later device/volume change events to the console.
 
-## Technologies Used
-
-- **C++ / Go (Golang)**: Core logic implementation.
-- **C# / WPF**: Lightweight UI for displaying live volume levels of the currently default audio devices.
-
-## Install and Run:
+## Install and Run
 
 ### `SoundDefaultUI.exe`
 - Download and unzip the latest rollout of **SoundDefaultUI-x.x.x**. from the latest repository
@@ -49,7 +101,7 @@ release's assets, [Release](https://github.com/collect-sound-devices/sound-win-s
   release's assets, [Release](https://github.com/collect-sound-devices/sound-win-scanner/releases/latest)
 
 
-## Developer Environment, How to Build:
+## Developer Environment, How to Build
 
 ### Prerequisites
 
