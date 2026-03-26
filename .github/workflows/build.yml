@@ -149,7 +149,7 @@ jobs:
             throw "x64/Release directory not found; nothing to package."
           }
           $binSourceExe = Join-Path $binPath "$app_name.exe" 
-          $binSourceDll = Join-Path $binPath "$SoundAgentApi.dll"
+          $binSourceDll = Join-Path $binPath "SoundAgentApi.dll"
           $destinationPath = Join-Path $PWD "artifacts"
           $destinationPath = Join-Path $destinationPath $artifactName
           Compress-Archive -Path $binSourceExe, $binSourceDll -DestinationPath $destinationPath -Force
