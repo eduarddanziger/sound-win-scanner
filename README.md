@@ -29,24 +29,24 @@ It contains:
 
 ## Install and Run:
 
-### SoundDefaultUI
-- Download and unzip the latest rollout of SoundDefaultUI-x.x.x. from the latest repository
+### `SoundDefaultUI.exe`
+- Download and unzip the latest rollout of **SoundDefaultUI-x.x.x**. from the latest repository
 release's assets, [Release](https://github.com/collect-sound-devices/sound-win-scanner/releases/latest)
 
-- Install certificates and unblock the SoundDefaultUI.exe per PowerShell (start as Administrator):
+- Install certificates and unblock the `SoundDefaultUI.exe` per PowerShell (start as Administrator):
     ```powershell
     Import-Certificate -FilePath .\CodeSign.cer -CertStoreLocation Cert:\LocalMachine\Root
     Unblock-File -Path .\SoundDefaultUI.exe
     ```
-- SoundDefaultUI is ready to run.
+### 'SoundAgentCli.exe'
 
-### SoundAgentCli
-
-- Download and unzip the latest rollout of SoundAgentCli-x.x.x. from the latest repository
+- Download and unzip the latest rollout of **SoundAgentCli-x.x.x**. from the latest repository
   release's assets, [Release](https://github.com/collect-sound-devices/sound-win-scanner/releases/latest)
 
-- SoundAgentCli is ready to run.
+### 'win-sound-logger'
 
+- Download and unzip the latest rollout of **win-sound-logger-x.x.x**. from the latest repository
+  release's assets, [Release](https://github.com/collect-sound-devices/sound-win-scanner/releases/latest)
 
 
 ## Developer Environment, How to Build:
