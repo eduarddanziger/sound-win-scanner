@@ -9,7 +9,7 @@ It contains:
 - SoundAgentApi DLL, that provides a simple ANSI C API to the library for external clients
 - SoundDefaultUI, a lightweight C# UI monitor with SoundAgentApi as backend
 - sound-win-scanner, a Go-module that leverages SoundAgentApi for Go-clients
-- win-sound-logger, a simple CLI tool to log audio device information to the console, using SoundAgentApi as backend
+- win-sound-logger, a simple Go (Golang) CLI tool to log audio device information to the console, using SoundAgentApi as backend
 
 ## Modules Generated
 
@@ -23,7 +23,7 @@ It contains:
 
 ## Technologies Used
 
-- **C++ / Go**: Core logic implementation.
+- **C++ / Go (Golang)**: Core logic implementation.
 - **C# / WPF**: Lightweight UI for displaying live volume levels of the currently default audio devices.
 
 ## SoundDefaultUI

@@ -11,6 +11,8 @@ Released on $date$
 ~~~
 
 ## Changes
+- Explicit result codes for errors
+- win-sound-logger Go (Golang) tool added. It's a test for sound-win-scanner Go module.
 - Latest C++ compiler from Visual Studio 2026, logging improvements, and code cleanup
 - sound-win-scanner.go module generated
 
@@ -21,5 +23,5 @@ Released on 14.09.2025
 ~~~
 
 ## New
-- Initial, based on SoundWinAgent [SoundWinScanner](https://github.com/eduarddanziger/SoundWinAgent.git) 
+- Initial, based on the obsolete SoundWinAgent [SoundWinScanner](https://github.com/eduarddanziger/SoundWinAgent.git) 
 
