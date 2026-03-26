@@ -28,93 +28,21 @@ Param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-function Add-DirectoryToPath {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$Directory
-    )
-
-    $currentPath = [Environment]::GetEnvironmentVariable("PATH", "Process")
-    $pathEntries = @()
-    if (-not [string]::IsNullOrWhiteSpace($currentPath)) {
-        $pathEntries = $currentPath -split ";"
-    }
-
-    $normalizedDirectory = [System.IO.Path]::GetFullPath($Directory).TrimEnd("\")
-    foreach ($entry in $pathEntries) {
-        if ([string]::IsNullOrWhiteSpace($entry)) {
-            continue
-        }
-
-        try {
-            $normalizedEntry = [System.IO.Path]::GetFullPath($entry).TrimEnd("\")
-        } catch {
-            continue
-        }
-
-        if ($normalizedEntry -ieq $normalizedDirectory) {
-            return
-        }
-    }
-
-    if ([string]::IsNullOrWhiteSpace($currentPath)) {
-        [Environment]::SetEnvironmentVariable("PATH", $Directory, "Process")
-        return
-    }
-
-    [Environment]::SetEnvironmentVariable("PATH", "$Directory;$currentPath", "Process")
-}
-
-function Find-CompilerPairOnPath {
-    param(
-        $CandidatePairs
-    )
-
-    foreach ($pair in $CandidatePairs) {
-        $cc = Get-Command $pair[0] -ErrorAction SilentlyContinue
-        $cxx = Get-Command $pair[1] -ErrorAction SilentlyContinue
-        if ($cc -and $cxx) {
-            return @{
-                CC = $pair[0]
-                CXX = $pair[1]
-            }
-        }
-    }
-
-    return $null
-}
-
 # go to the repo root (parent of the script directory)
 Set-Location -LiteralPath $PSScriptRoot
 $repoRoot = [System.IO.Directory]::GetParent($PSScriptRoot).FullName
 Set-Location -LiteralPath $repoRoot
 
 if (-not $respectExistingCompiler) {
-    if (-not [string]::IsNullOrWhiteSpace($mingwPath)) {
+    if ($mingwPath -ne "") {
         if (-not (Test-Path -LiteralPath $mingwPath)) {
-            throw "mingwPath '$mingwPath' does not exist."
+            Write-Error "mingwPath '$mingwPath' does not exist. Set it to a valid llvm-mingw root or pass an empty string to skip overriding CC/CXX."
+            Get-Help $PSCommandPath -Detailed
+            exit 1
         }
-
-        $mingwBinPath = Join-Path $mingwPath "bin"
-        if (-not (Test-Path -LiteralPath $mingwBinPath)) {
-            throw "mingwPath '$mingwPath' does not contain a 'bin' directory."
-        }
-
-        Add-DirectoryToPath -Directory $mingwBinPath
+        $Env:CC = Join-Path $mingwPath "bin/x86_64-w64-mingw32-clang.exe"
+        $Env:CXX = Join-Path $mingwPath "bin/x86_64-w64-mingw32-clang++.exe"
     }
-
-    $compilerPair = Find-CompilerPairOnPath -CandidatePairs @(
-        @("x86_64-w64-mingw32-clang", "x86_64-w64-mingw32-clang++"),
-        @("x86_64-w64-mingw32-gcc", "x86_64-w64-mingw32-g++"),
-        @("gcc", "g++")
-    )
-
-    if (-not $compilerPair) {
-        throw "Could not find a GNU-compatible Windows C toolchain. Install llvm-mingw or MSYS2/mingw-w64, or pass -mingwPath. Visual Studio Clang/MSVC alone is not sufficient for this Go CGO build."
-    }
-
-    $Env:CC = $compilerPair.CC
-    $Env:CXX = $compilerPair.CXX
 }
 
 $Env:CGO_ENABLED = "1"
