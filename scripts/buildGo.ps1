@@ -15,7 +15,7 @@ Param(
     [string]$mingwPath = "E:\\tools\\llvm-mingw\\",
     [Alias("c")]
     [Parameter(HelpMessage = "MSBuild configuration, Debug or Release.")]
-    [string]$msbuildConfig = "Debug"
+    [string]$msbuildConfig = "Release"
 )
 
 # go to the repo root
