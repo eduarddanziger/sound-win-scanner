@@ -72,6 +72,9 @@ jobs:
         with:
           submodules: true
 
+      - name: Unshallow repository
+        run: git fetch --prune --unshallow
+
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v3
 
