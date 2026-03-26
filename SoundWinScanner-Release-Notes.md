@@ -10,6 +10,12 @@ $version$
 Released on $date$
 ~~~
 
+4.0.5
+--------
+~~~
+Released on 26.03.2026
+~~~
+
 ## Changes
 - Explicit result codes for errors
 - win-sound-logger Go (Golang) tool added. It's a test for sound-win-scanner Go module.
